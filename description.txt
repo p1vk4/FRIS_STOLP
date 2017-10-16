@@ -1,0 +1,2 @@
+python fris_stolp.py --l 0.7 --gamma 0.5
+
