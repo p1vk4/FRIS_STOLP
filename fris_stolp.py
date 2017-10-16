@@ -27,15 +27,17 @@ class Fris_stolp():
     
     def find_etalon(self, X_y, diff_X_l_x_y, current_omega):
         e_x = []
+        each_nn_X_y = [self.nn(u, current_omega) for u in X_y]
+        each_nn_diff_x_y = [self.nn(v, current_omega) for v in diff_X_l_x_y]
         for i, x in enumerate(X_y):
             summ = 0
             for j, u in enumerate(X_y):
                 if i != j:
-                    summ += self.fris_function(u, x, self.nn(u, current_omega))
+                    summ += self.fris_function(u, x, each_nn_X_y[j])
             dx = 1 / (len(X_y) - 1) * summ
             summ = 0
-            for v in diff_X_l_x_y:
-                summ += self.fris_function(v, x, self.nn(v, current_omega))
+            for j, v in enumerate(diff_X_l_x_y):
+                summ += self.fris_function(v, x, each_nn_diff_x_y[j])
             tx = (1 / len(diff_X_l_x_y)) * summ
             e_x.append(self.l * dx + (1 - self.l) * tx)
         return X_y[e_x.index(max(e_x))]
